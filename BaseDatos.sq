@@ -1,0 +1,56 @@
+-- Database: apiproject
+
+-- DROP DATABASE IF EXISTS apiproject;
+
+CREATE DATABASE apiproject
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'C'
+    LC_CTYPE = 'C'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+-- Table: public.api_cliente
+
+-- DROP TABLE IF EXISTS public.api_cliente;
+
+CREATE TABLE IF NOT EXISTS public.api_cliente
+(
+    persona_ptr_id bigint NOT NULL,
+    num_cargas_faml integer NOT NULL,
+    fecha_residencia date NOT NULL,
+    estado_civil character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    tipo_cliente character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT api_cliente_pkey PRIMARY KEY (persona_ptr_id),
+    CONSTRAINT api_cliente_persona_ptr_id_87074ed4_fk_api_persona_id FOREIGN KEY (persona_ptr_id)
+        REFERENCES public.api_persona (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        DEFERRABLE INITIALLY DEFERRED,
+    CONSTRAINT api_cliente_num_cargas_faml_check CHECK (num_cargas_faml >= 0)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.api_cliente
+    OWNER to postgres;
+    
+-- Table: public.api_persona
+
+-- DROP TABLE IF EXISTS public.api_persona;
+
+CREATE TABLE IF NOT EXISTS public.api_persona
+(
+    id bigint NOT NULL DEFAULT nextval('api_persona_id_seq'::regclass),
+    name character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    genero character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    identificacion character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    tipo_identificacion character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT api_persona_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.api_persona
+    OWNER to postgres;
